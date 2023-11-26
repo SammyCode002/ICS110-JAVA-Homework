@@ -1,0 +1,10 @@
+public class CheckingAccount extends BankAccount {
+    public CheckingAccount(int pin) {
+        super(pin);
+    }
+
+    @Override
+    public void applyMonthlyProcess() {
+        // No monthly interest for checking accounts
+    }
+}
