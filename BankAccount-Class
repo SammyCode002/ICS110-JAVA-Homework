@@ -1,0 +1,41 @@
+public abstract class BankAccount {
+    protected double balance;
+    private int pin;
+
+    public BankAccount(int pin) {
+        this.balance = 0;
+        this.pin = pin;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+
+    public boolean withdraw(double amount) {
+        if (amount > 0 && balance >= amount) {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public boolean checkPin(int inputPin) {
+        return this.pin == inputPin;
+    }
+
+    public abstract void applyMonthlyProcess();
+
+    public boolean transfer(BankAccount otherAccount, double amount) {
+        if (this.withdraw(amount)) {
+            otherAccount.deposit(amount);
+            return true;
+        }
+        return false;
+    }
+}
