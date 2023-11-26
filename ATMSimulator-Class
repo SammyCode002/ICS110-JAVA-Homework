@@ -1,0 +1,90 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ATMSimulator {
+    private ArrayList<BankAccount> accounts;
+
+    public ATMSimulator() {
+        accounts = new ArrayList<>();
+        accounts.add(new CheckingAccount(1234)); // Checking account with PIN 1234
+        accounts.add(new SavingsAccount(5678));  // Savings account with PIN 5678
+    }
+
+    public void run() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("Enter account number (or -1 to exit): ");
+            int accountNumber = scanner.nextInt();
+
+            if (accountNumber == -1) break;
+
+            if (accountNumber < 0 || accountNumber >= accounts.size()) {
+                System.out.println("Invalid account number.");
+                continue;
+            }
+
+            BankAccount account = accounts.get(accountNumber);
+            System.out.println("Enter PIN: ");
+            int pin = scanner.nextInt();
+
+            if (!account.checkPin(pin)) {
+                System.out.println("Incorrect PIN.");
+                continue;
+            }
+
+            boolean session = true;
+            while (session) {
+                System.out.println("Select an option: 1) Deposit 2) Withdraw 3) Check Balance 4) Transfer 5) Exit");
+                int choice = scanner.nextInt();
+
+                switch (choice) {
+                    case 1: // Deposit
+                        System.out.println("Enter amount to deposit: ");
+                        double depositAmount = scanner.nextDouble();
+                        account.deposit(depositAmount);
+                        System.out.println("Deposited: " + depositAmount);
+                        break;
+                    case 2: // Withdraw
+                        System.out.println("Enter amount to withdraw: ");
+                        double withdrawAmount = scanner.nextDouble();
+                        if (!account.withdraw(withdrawAmount)) {
+                            System.out.println("Insufficient funds.");
+                        } else {
+                            System.out.println("Withdrawn: " + withdrawAmount);
+                        }
+                        break;
+                    case 3: // Check Balance
+                        System.out.println("Current balance: " + account.getBalance());
+                        break;
+                    case 4: // Transfer
+                        System.out.println("Enter target account number: ");
+                        int targetAccountNumber = scanner.nextInt();
+                        if (targetAccountNumber < 0 || targetAccountNumber >= accounts.size()) {
+                            System.out.println("Invalid account number.");
+                            break;
+                        }
+                        System.out.println("Enter amount to transfer: ");
+                        double transferAmount = scanner.nextDouble();
+                        if (!account.transfer(accounts.get(targetAccountNumber), transferAmount)) {
+                            System.out.println("Transfer failed.");
+                        } else {
+                            System.out.println("Transferred: " + transferAmount);
+                        }
+                        break;
+                    case 5: // Exit
+                        session = false;
+                        break;
+                    default:
+                        System.out.println("Invalid option.");
+                        break;
+                }
+            }
+        }
+        scanner.close();
+        System.out.println("Thank you for using the ATM!");
+    }
+
+    public static void main(String[] args) {
+        new ATMSimulator().run();
+    }
+}
