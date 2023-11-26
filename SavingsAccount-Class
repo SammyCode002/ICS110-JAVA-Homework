@@ -1,0 +1,15 @@
+public class SavingsAccount extends BankAccount {
+    private static final double MIN_BALANCE = 100;
+    private static final double INTEREST_RATE = 0.0025; // 0.25%
+
+    public SavingsAccount(int pin) {
+        super(pin);
+    }
+
+    @Override
+    public void applyMonthlyProcess() {
+        if (balance >= MIN_BALANCE) {
+            balance += balance * INTEREST_RATE;
+        }
+    }
+}
